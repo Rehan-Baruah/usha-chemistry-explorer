@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import ElementPopup from './ElementPopup';
 
@@ -16,6 +15,8 @@ export interface ElementData {
 
 interface ElementTileProps {
   element: ElementData;
+  isInteractive?: boolean;
+  onAskUsha?: () => void;
 }
 
 const getElementColor = (classification: string): string => {
@@ -45,14 +46,14 @@ const getElementColor = (classification: string): string => {
   }
 };
 
-const ElementTile: React.FC<ElementTileProps> = ({ element }) => {
+const ElementTile: React.FC<ElementTileProps> = ({ element, isInteractive = true, onAskUsha }) => {
   const [showPopup, setShowPopup] = useState(false);
   const tileRef = useRef<HTMLDivElement>(null);
   const colorClass = getElementColor(element.classification);
 
   const handleMouseEnter = () => {
-    // For desktop only
-    if (window.matchMedia("(min-width: 768px)").matches) {
+    // For desktop only and only if interactive
+    if (window.matchMedia("(min-width: 768px)").matches && isInteractive) {
       setShowPopup(true);
     }
   };
@@ -65,8 +66,10 @@ const ElementTile: React.FC<ElementTileProps> = ({ element }) => {
   };
 
   const handleClick = () => {
-    // Toggle for mobile and desktop
-    setShowPopup(!showPopup);
+    // Toggle for mobile and desktop, only if interactive
+    if (isInteractive) {
+      setShowPopup(!showPopup);
+    }
   };
 
   const closePopup = () => {
@@ -76,7 +79,7 @@ const ElementTile: React.FC<ElementTileProps> = ({ element }) => {
   return (
     <div
       ref={tileRef}
-      className={`border border-gray-300 p-1 flex flex-col items-center justify-between ${colorClass} h-16 w-16 text-gray-800 relative cursor-pointer`}
+      className={`border border-gray-300 p-1 flex flex-col items-center justify-between ${colorClass} h-16 w-16 text-gray-800 relative ${isInteractive ? 'cursor-pointer' : 'cursor-default'}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={handleClick}
@@ -94,6 +97,7 @@ const ElementTile: React.FC<ElementTileProps> = ({ element }) => {
         <ElementPopup 
           element={element} 
           onClose={closePopup}
+          onAskUsha={onAskUsha}
         />
       )}
     </div>

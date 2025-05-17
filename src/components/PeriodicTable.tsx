@@ -1,9 +1,15 @@
-
 import React from 'react';
 import ElementTile, { ElementData } from './ElementTile';
 import elementsData from '../data/elements.json';
+import reactionsData from '../data/reactions.json';
+import { FilterState } from './FilterPanel';
 
-const PeriodicTable: React.FC = () => {
+interface PeriodicTableProps {
+  filters: FilterState;
+  openElementChat: (elementName: string) => void;
+}
+
+const PeriodicTable: React.FC<PeriodicTableProps> = ({ filters, openElementChat }) => {
   const elements: ElementData[] = elementsData as ElementData[];
 
   // Create a map of elements by their atomic number for easy lookup
@@ -17,16 +23,61 @@ const PeriodicTable: React.FC = () => {
     return elementsMap.get(atomicNumber);
   };
 
+  // Filter elements based on active filters
+  const shouldShowElement = (element: ElementData): boolean => {
+    // Check if element matches classification filter
+    if (filters.classifications.length > 0 && !filters.classifications.includes(element.classification)) {
+      return false;
+    }
+
+    // Check if element matches block filter
+    if (filters.blocks.length > 0 && !filters.blocks.includes(element.block)) {
+      return false;
+    }
+
+    // Check if element matches series filter
+    if (filters.series.length > 0) {
+      const matchesSeries = 
+        (filters.series.includes('Lanthanide') && element.classification === 'Lanthanide') ||
+        (filters.series.includes('Actinide') && element.classification === 'Actinide');
+      if (!matchesSeries) {
+        return false;
+      }
+    }
+
+    // Check if element is involved in selected reaction
+    if (filters.reaction) {
+      const reaction = reactionsData.find(r => r.name === filters.reaction);
+      if (reaction && !reaction.elementsInvolved.includes(element.symbol)) {
+        return false;
+      }
+    }
+
+    // If all filters passed, show the element
+    return true;
+  };
+
   // Helper function to render empty cells for spacing
   const renderEmptyCell = (key: string) => (
     <div key={key} className="h-16 w-16"></div>
   );
 
-  // Render a specific element by atomic number
+  // Render a specific element by atomic number with filter application
   const renderElement = (atomicNumber: number) => {
     const element = getElement(atomicNumber);
     if (!element) return renderEmptyCell(`empty-${atomicNumber}`);
-    return <ElementTile key={element.atomicNumber} element={element} />;
+    
+    const isVisible = shouldShowElement(element);
+    
+    return (
+      <div key={element.atomicNumber} className={isVisible ? '' : 'opacity-30'}>
+        <ElementTile 
+          element={element} 
+          isInteractive={isVisible}
+          onAskUsha={() => openElementChat(element.name)}
+        />
+      </div>
+    );
   };
 
   // Split elements into periods for the main grid

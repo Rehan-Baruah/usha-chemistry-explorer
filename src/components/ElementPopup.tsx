@@ -5,9 +5,10 @@ import { ElementData } from './ElementTile';
 interface ElementPopupProps {
   element: ElementData;
   onClose: () => void;
+  onAskUsha?: () => void;
 }
 
-const ElementPopup: React.FC<ElementPopupProps> = ({ element, onClose }) => {
+const ElementPopup: React.FC<ElementPopupProps> = ({ element, onClose, onAskUsha }) => {
   return (
     <div className="absolute z-10 bg-white p-4 rounded-lg shadow-lg border border-gray-200 w-64">
       <button 
@@ -49,6 +50,11 @@ const ElementPopup: React.FC<ElementPopupProps> = ({ element, onClose }) => {
         
         <button 
           className="mt-3 bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 transition-colors w-full"
+          onClick={(e) => {
+            e.stopPropagation();
+            onAskUsha && onAskUsha();
+            onClose();
+          }}
         >
           Ask Usha about {element.name}
         </button>
