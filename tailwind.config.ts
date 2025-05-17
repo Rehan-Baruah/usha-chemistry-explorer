@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,19 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				element: {
+					'alkali-metal': '#ffcccb',
+					'alkaline-earth-metal': '#fed8b1',
+					'transition-metal': '#ffffb3',
+					'post-transition-metal': '#bfe6ff',
+					'metalloid': '#c2e8c2',
+					'non-metal': '#e6ffe6',
+					'halogen': '#e6e6ff',
+					'noble-gas': '#e6ccff',
+					'lanthanide': '#ffdbf0',
+					'actinide': '#ffddc2',
+					'unknown': '#e6e6e6',
 				}
 			},
 			borderRadius: {
