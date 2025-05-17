@@ -8,7 +8,8 @@ const Index = () => {
       <div className="container mx-auto px-4 py-8">
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-center text-gray-800">Interactive Periodic Table</h1>
-          <p className="text-center text-gray-600 mt-2">Explore all 118 elements of the periodic table</p>
+          <p className="text-center text-gray-600 mt-2">Hover over or click on elements to see detailed information</p>
+          <p className="text-center text-gray-500 mt-1 text-sm">Built with Element + Usha chat functionality</p>
         </header>
         
         <main className="bg-white rounded-lg shadow-lg p-4 overflow-x-auto">

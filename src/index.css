@@ -50,6 +50,19 @@
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Element classification colors */
+    --element-alkali-metal: 0 100% 87%;
+    --element-alkaline-earth-metal: 22 100% 87%; 
+    --element-transition-metal: 39 100% 87%;
+    --element-post-transition-metal: 61 60% 87%;
+    --element-metalloid: 120 40% 87%;
+    --element-non-metal: 146 60% 87%;  
+    --element-halogen: 180 70% 87%;
+    --element-noble-gas: 211 70% 87%;
+    --element-lanthanide: 273 70% 87%;
+    --element-actinide: 302 70% 87%;
+    --element-unknown: 0 0% 87%;
   }
 
   .dark {
@@ -88,6 +101,19 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Element classification colors - darker for dark mode */
+    --element-alkali-metal: 0 80% 30%;
+    --element-alkaline-earth-metal: 22 80% 30%; 
+    --element-transition-metal: 39 80% 30%;
+    --element-post-transition-metal: 61 40% 30%;
+    --element-metalloid: 120 30% 30%;
+    --element-non-metal: 146 40% 30%;  
+    --element-halogen: 180 50% 30%;
+    --element-noble-gas: 211 50% 30%;
+    --element-lanthanide: 273 50% 30%;
+    --element-actinide: 302 50% 30%;
+    --element-unknown: 0 0% 30%;
   }
 }
 
@@ -108,5 +134,50 @@
   
   .grid-cols-18 {
     grid-template-columns: repeat(18, minmax(0, 1fr));
+  }
+  
+  /* Element classification background colors */
+  .bg-element-alkali-metal {
+    background-color: hsl(var(--element-alkali-metal));
+  }
+  
+  .bg-element-alkaline-earth-metal {
+    background-color: hsl(var(--element-alkaline-earth-metal));
+  }
+  
+  .bg-element-transition-metal {
+    background-color: hsl(var(--element-transition-metal));
+  }
+  
+  .bg-element-post-transition-metal {
+    background-color: hsl(var(--element-post-transition-metal));
+  }
+  
+  .bg-element-metalloid {
+    background-color: hsl(var(--element-metalloid));
+  }
+  
+  .bg-element-non-metal {
+    background-color: hsl(var(--element-non-metal));
+  }
+  
+  .bg-element-halogen {
+    background-color: hsl(var(--element-halogen));
+  }
+  
+  .bg-element-noble-gas {
+    background-color: hsl(var(--element-noble-gas));
+  }
+  
+  .bg-element-lanthanide {
+    background-color: hsl(var(--element-lanthanide));
+  }
+  
+  .bg-element-actinide {
+    background-color: hsl(var(--element-actinide));
+  }
+  
+  .bg-element-unknown {
+    background-color: hsl(var(--element-unknown));
   }
 }

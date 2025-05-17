@@ -1,5 +1,6 @@
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
+import ElementPopup from './ElementPopup';
 
 export interface ElementData {
   atomicNumber: number;
@@ -45,11 +46,40 @@ const getElementColor = (classification: string): string => {
 };
 
 const ElementTile: React.FC<ElementTileProps> = ({ element }) => {
+  const [showPopup, setShowPopup] = useState(false);
+  const tileRef = useRef<HTMLDivElement>(null);
   const colorClass = getElementColor(element.classification);
+
+  const handleMouseEnter = () => {
+    // For desktop only
+    if (window.matchMedia("(min-width: 768px)").matches) {
+      setShowPopup(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    // For desktop only
+    if (window.matchMedia("(min-width: 768px)").matches) {
+      setShowPopup(false);
+    }
+  };
+
+  const handleClick = () => {
+    // Toggle for mobile and desktop
+    setShowPopup(!showPopup);
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
+  };
 
   return (
     <div
-      className={`border border-gray-300 p-1 flex flex-col items-center justify-between ${colorClass} h-16 w-16 text-gray-800 relative`}
+      ref={tileRef}
+      className={`border border-gray-300 p-1 flex flex-col items-center justify-between ${colorClass} h-16 w-16 text-gray-800 relative cursor-pointer`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={handleClick}
     >
       <div className="text-xs absolute top-0 left-1">{element.atomicNumber}</div>
       <div className="font-bold text-xl">{element.symbol}</div>
@@ -59,6 +89,13 @@ const ElementTile: React.FC<ElementTileProps> = ({ element }) => {
       <div className="text-[7px] leading-tight absolute bottom-0.5">
         {parseFloat(element.atomicMass).toFixed(1)}
       </div>
+      
+      {showPopup && (
+        <ElementPopup 
+          element={element} 
+          onClose={closePopup}
+        />
+      )}
     </div>
   );
 };

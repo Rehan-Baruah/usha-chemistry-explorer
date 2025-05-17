@@ -1,0 +1,48 @@
+
+[
+  {
+    "name": "Haber-Bosch Process",
+    "description": "Industrial synthesis of ammonia from nitrogen and hydrogen gases.",
+    "elementsInvolved": ["N", "H"],
+    "reactants": ["N₂", "H₂"],
+    "products": ["NH₃"],
+    "conditions": "High pressure (200 atm), moderate temperature (400-450°C), iron catalyst",
+    "applications": "Critical for global food production through fertilizer manufacturing."
+  },
+  {
+    "name": "Grignard Reaction",
+    "description": "Formation of carbon-carbon bonds using organomagnesium halides.",
+    "elementsInvolved": ["Mg", "C", "O", "H"],
+    "reactants": ["R-X", "Mg", "R'-C=O"],
+    "products": ["R-R'-C-OH"],
+    "conditions": "Anhydrous ether solvent, inert atmosphere (absence of water and oxygen)",
+    "applications": "Synthesis of alcohols, pharmaceutical intermediates, and complex organic molecules."
+  },
+  {
+    "name": "Diels-Alder Reaction",
+    "description": "Cycloaddition between a conjugated diene and a dienophile.",
+    "elementsInvolved": ["C", "H"],
+    "reactants": ["C₄H₆ (diene)", "C₂H₂ (dienophile)"],
+    "products": ["C₆H₈ (cyclohexene derivative)"],
+    "conditions": "Wide range of conditions; often room temperature, can be accelerated with Lewis acids",
+    "applications": "Synthesis of cyclic compounds, natural products, and pharmaceuticals."
+  },
+  {
+    "name": "Wittig Reaction",
+    "description": "Converts aldehydes or ketones into alkenes using phosphonium ylides.",
+    "elementsInvolved": ["C", "O", "P", "H"],
+    "reactants": ["R₂C=O", "R'₃P=CR₂"],
+    "products": ["R₂C=CR₂", "R'₃P=O"],
+    "conditions": "Strong base, typically at room temperature",
+    "applications": "Synthesis of alkenes with precise double bond positioning, vitamin A synthesis."
+  },
+  {
+    "name": "Friedel-Crafts Acylation",
+    "description": "Electrophilic aromatic substitution reaction introducing acyl groups.",
+    "elementsInvolved": ["C", "O", "H", "Al", "Cl"],
+    "reactants": ["ArH", "R-COCl", "AlCl₃"],
+    "products": ["Ar-COR", "HCl"],
+    "conditions": "Lewis acid catalyst (typically AlCl₃), anhydrous conditions",
+    "applications": "Production of aromatic ketones, pharmaceuticals, dyes, and fragrances."
+  }
+]
