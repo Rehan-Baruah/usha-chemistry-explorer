@@ -2,6 +2,28 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send } from 'lucide-react';
 import { sendChatMessage, ChatMessage as GeminiChatMessage, ElementContext } from '../services/chatService';
+import elementsData from '../data/elements.json';
+
+// Helper function to find element by name
+const findElementByName = (elementName: string): ElementContext | undefined => {
+  const element = (elementsData as any[]).find(
+    (el: any) => el.name.toLowerCase() === elementName.toLowerCase()
+  );
+  
+  if (!element) return undefined;
+  
+  return {
+    name: element.name,
+    symbol: element.symbol,
+    atomicNumber: element.atomicNumber,
+    atomicMass: element.atomicMass,
+    electronConfiguration: element.electronConfiguration,
+    group: element.group,
+    period: element.period,
+    classification: element.classification,
+    block: element.block
+  };
+};
 
 interface Message {
   id: string;
@@ -18,18 +40,34 @@ interface ChatModalProps {
 
 const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext }) => {
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState<Message[]>([
-    {
+  const [isLoading, setIsLoading] = useState(false);
+  const [conversationHistory, setConversationHistory] = useState<GeminiChatMessage[]>([]);
+  
+  // Initialize messages with welcome message based on element context
+  const [messages, setMessages] = useState<Message[]>(() => {
+    return [{
       id: '1',
       sender: 'usha',
       text: elementContext 
-        ? `Hello! I'm Usha, a Nobel laureate in Chemistry (AI). Ask me anything about ${elementContext}!`
-        : "Hello! I'm Usha, a Nobel laureate in Chemistry (AI). How can I assist you with your chemistry questions today?",
+        ? `Hello! I'm Usha, your chemistry expert. I see you're interested in ${elementContext}. What would you like to know about this element?`
+        : "Hello! I'm Usha, your chemistry expert. How can I assist you with your chemistry questions today?",
       timestamp: new Date()
+    }];
+  });
+  
+  // Update welcome message when elementContext changes
+  useEffect(() => {
+    if (messages.length === 1) { // Only update if it's just the welcome message
+      setMessages([{
+        id: '1',
+        sender: 'usha',
+        text: elementContext 
+          ? `Hello! I'm Usha, your chemistry expert. I see you're interested in ${elementContext}. What would you like to know about this element?`
+          : "Hello! I'm Usha, your chemistry expert. How can I assist you with your chemistry questions today?",
+        timestamp: new Date()
+      }]);
     }
-  ]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [conversationHistory, setConversationHistory] = useState<GeminiChatMessage[]>([]);
+  }, [elementContext]); // Only run when elementContext changes
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
@@ -42,7 +80,8 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext }
 
   // Transform our Messages array to Gemini's ChatMessage format
   const formatMessagesForGemini = () => {
-    return messages.map(message => ({
+    // Skip the first message (welcome message) and any system messages
+    return messages.slice(1).map(message => ({
       role: message.sender === 'user' ? 'user' as const : 'model' as const,
       parts: [{ text: message.text }]
     }));
@@ -60,19 +99,29 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext }
       timestamp: new Date()
     };
     
+    // Add user message to the UI immediately for better UX
     setMessages(prev => [...prev, newUserMessage]);
     setInput('');
     setIsLoading(true);
     
     try {
-      // Format messages for Gemini API
+      // Format messages for Gemini API (exclude the first welcome message)
       const historyForGemini = formatMessagesForGemini();
       
       // Get element context data if we're in element-specific chat
       const elementData = elementContext ? findElementByName(elementContext) : undefined;
       
+      console.log('Sending message with element context:', {
+        elementContext,
+        elementData,
+        message: input,
+        history: historyForGemini
+      });
+      
       // Send to Gemini API
       const response = await sendChatMessage(input, historyForGemini, elementData);
+      
+      console.log('Received response from Gemini:', response);
       
       // Add Usha's response
       const responseMessage: Message = {
@@ -82,21 +131,31 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext }
         timestamp: new Date()
       };
       
-      setMessages(prev => [...prev, responseMessage]);
+      // Replace the messages array to ensure we maintain the correct state
+      setMessages(prev => {
+        const newMessages = [...prev, responseMessage];
+        // Update conversation history with the latest messages
+        setConversationHistory(
+          newMessages.slice(1).map(msg => ({
+            role: msg.sender === 'user' ? 'user' as const : 'model' as const,
+            parts: [{ text: msg.text }]
+          }))
+        );
+        return newMessages;
+      });
       
-      // Update conversation history
-      setConversationHistory(formatMessagesForGemini());
     } catch (error) {
       // Handle error
+      console.error('Chat error:', error);
+      
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         sender: 'usha',
-        text: "I'm sorry, I couldn't process your request right now. Please try again later.",
+        text: "I'm sorry, I encountered an error while processing your request. Please try again.",
         timestamp: new Date()
       };
       
       setMessages(prev => [...prev, errorMessage]);
-      console.error('Chat error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -128,11 +187,13 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext }
     }
   };
   
-  // Handle Enter key
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  // Handle pressing Enter key to send message
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSend();
+      if (!isLoading) { // Only send if not already loading
+        handleSend();
+      }
     }
   };
   
@@ -197,13 +258,13 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext }
         {/* Input Area */}
         <div className="p-4 border-t">
           <div className="flex space-x-2">
-            <textarea
+            <input
+              type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyPress}
+              onKeyDown={handleKeyDown}
               placeholder="Type your message..."
-              className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
-              rows={2}
+              className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
               disabled={isLoading}
             />
             <button

@@ -79,18 +79,25 @@ const ElementTile: React.FC<ElementTileProps> = ({ element, isInteractive = true
   return (
     <div
       ref={tileRef}
-      className={`border border-gray-300 p-1 flex flex-col items-center justify-between ${colorClass} h-16 w-16 text-gray-800 relative ${isInteractive ? 'cursor-pointer' : 'cursor-default'}`}
+      className={`border border-gray-300 p-1 flex flex-col items-center ${colorClass} h-16 w-16 text-gray-800 relative ${isInteractive ? 'cursor-pointer' : 'cursor-default'}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={handleClick}
     >
+      {/* Top section: Atomic Number */}
       <div className="text-xs absolute top-0 left-1">{element.atomicNumber}</div>
-      <div className="font-bold text-xl">{element.symbol}</div>
-      <div className="text-[8px] leading-tight mt-0.5 truncate w-full text-center">
-        {element.name}
-      </div>
-      <div className="text-[7px] leading-tight absolute bottom-0.5">
-        {parseFloat(element.atomicMass).toFixed(1)}
+      
+      {/* Middle section: Symbol */}
+      <div className="font-bold text-xl mt-2">{element.symbol}</div>
+      
+      {/* Bottom section: Name and Atomic Mass with proper spacing */}
+      <div className="flex flex-col items-center mt-auto w-full">
+        <div className="text-[8px] leading-none w-full text-center truncate mb-1.5">
+          {element.name}
+        </div>
+        <div className="text-[7px] leading-none w-full text-center">
+          {parseFloat(element.atomicMass).toFixed(1)}
+        </div>
       </div>
       
       {showPopup && (
@@ -98,6 +105,7 @@ const ElementTile: React.FC<ElementTileProps> = ({ element, isInteractive = true
           element={element} 
           onClose={closePopup}
           onAskUsha={onAskUsha}
+          parentRef={tileRef}
         />
       )}
     </div>

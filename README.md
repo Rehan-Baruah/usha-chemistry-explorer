@@ -1,24 +1,96 @@
-# Welcome to your Lovable project
+# Interactive Periodic Table with Usha AI
 
-## Project info
+An educational web application that combines an interactive periodic table with an AI-powered chemistry assistant named Usha, designed to provide detailed information about chemical elements and answer chemistry-related questions.
 
-**URL**: https://lovable.dev/projects/ddf567e4-7665-4e30-a574-217106342b12
+## Features
 
-## How can I edit this code?
+- **Interactive Periodic Table**
+  - Displays all 118 elements with detailed information on hover/click
+  - Color-coded by element classification
+  - Responsive design that works on all devices
 
-There are several ways of editing your application.
+- **Element Information**
+  - Detailed popups with atomic properties
+  - Electron configuration
+  - Classification and period information
+  - Reactivity traits
 
-**Use Lovable**
+- **Usha AI Assistant**
+  - General chemistry Q&A
+  - Element-specific information and explanations
+  - Context-aware responses based on the selected element
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ddf567e4-7665-4e30-a574-217106342b12) and start prompting.
+- **Advanced Filtering**
+  - Filter by element classification (metals, non-metals, metalloids)
+  - Filter by block (s, p, d, f)
+  - Filter by series (lanthanides, actinides)
+  - Filter by reactivity traits
 
-Changes made via Lovable will be committed automatically to this repo.
+## Tech Stack
 
-**Use your preferred IDE**
+- **Frontend**: React with TypeScript
+- **Styling**: TailwindCSS
+- **Build Tool**: Vite
+- **AI**: Gemini 2.0 Flash API
+- **State Management**: React Query
+- **UI Components**: Radix UI Primitives with Shadcn/ui
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Getting Started
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Prerequisites
+
+- Node.js (v16 or later)
+- pnpm (recommended) or npm
+- Gemini API key
+
+### Installation
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/your-username/usha-chemistry-explorer.git
+   cd usha-chemistry-explorer
+   ```
+
+2. Install dependencies
+   ```bash
+   pnpm install
+   # or
+   npm install
+   ```
+
+3. Create a `.env` file in the root directory and add your Gemini API key:
+   ```
+   VITE_GEMINI_API_KEY=your_gemini_api_key_here
+   ```
+
+4. Start the development server
+   ```bash
+   pnpm dev
+   # or
+   npm run dev
+   ```
+
+5. Open [http://localhost:8080](http://localhost:8080) in your browser
+
+## Usage
+
+- **Explore Elements**: Hover or click on any element to see its detailed information
+- **Chat with Usha**: Click the chat icon in the bottom-right corner to ask chemistry questions
+- **Filter Elements**: Use the filter panel to find elements by various properties
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Periodic table data sourced from various open chemistry resources
+- Powered by Google's Gemini AI
+- Built with modern web technologies
 
 Follow these steps:
 
@@ -60,14 +132,3 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/ddf567e4-7665-4e30-a574-217106342b12) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
