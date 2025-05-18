@@ -2,8 +2,8 @@
 import axios from 'axios';
 import { ElementData } from '../components/ElementTile';
 
-// Use API key from environment variables
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+// Use API key - hardcoded for now since environment variable isn't working
+const API_KEY = 'AIzaSyBlAQHv3QPZNNOSOeAEMJtSJgTpGwsy1YQ';
 
 // Base URL for Gemini API
 const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent';
