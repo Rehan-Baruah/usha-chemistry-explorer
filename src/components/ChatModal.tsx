@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -6,15 +5,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { chatService, Message } from '../services/chatService';
 import { Loader2 } from "lucide-react";
+import { ElementData } from './ElementTile';
 
 interface ChatModalProps {
   isOpen: boolean;
   onClose: () => void;
-  elementContext?: { 
-    name: string; 
-    symbol: string; 
-    atomicNumber: number;
-  };
+  elementContext?: ElementData;
 }
 
 const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext }) => {

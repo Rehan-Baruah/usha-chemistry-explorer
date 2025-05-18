@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+import { ElementData } from '../components/ElementTile';
 
 // API key - NOTE: This should be moved to a secure backend in production
 const API_KEY = 'AIzaSyBlAQHv3QPZNNOSOeAEMJtSJgTpGwsy1YQ'; 
@@ -16,7 +17,7 @@ export const chatService = {
   sendMessage: async (
     message: string, 
     history: Message[] = [], 
-    elementContext?: { name: string; symbol: string; atomicNumber: number }
+    elementContext?: ElementData
   ) => {
     try {
       // Build system prompt based on context

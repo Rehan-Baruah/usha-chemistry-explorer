@@ -7,7 +7,7 @@ import GeneralChatButton from '../components/GeneralChatButton';
 import elementsData from '../data/elements.json';
 import { ElementData } from '../components/ElementTile';
 
-const Index = () => {
+const PeriodicTablePage = () => {
   // Extract unique classifications for filter options
   const availableClassifications = useMemo(() => {
     const elements: ElementData[] = elementsData as ElementData[];
@@ -24,12 +24,29 @@ const Index = () => {
 
   // State for chat modal
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [chatElementContext, setChatElementContext] = useState<string | undefined>(undefined);
+  const [chatElementContext, setChatElementContext] = useState<ElementData | undefined>(undefined);
+
+  // Create a map of elements by name for easy lookup
+  const elementsMap = useMemo(() => {
+    const map = new Map<string, ElementData>();
+    (elementsData as ElementData[]).forEach(element => {
+      map.set(element.name, element);
+    });
+    return map;
+  }, []);
 
   // Function to open chat with element context
   const openElementChat = (elementName: string) => {
-    setChatElementContext(elementName);
-    setIsChatOpen(true);
+    // Find the element by name from our elements data
+    const element = elementsMap.get(elementName);
+    if (element) {
+      setChatElementContext(element);
+      setIsChatOpen(true);
+    } else {
+      console.error(`Element not found: ${elementName}`);
+      // Open general chat as fallback
+      openGeneralChat();
+    }
   };
 
   // Function to open general chat
@@ -78,4 +95,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default PeriodicTablePage;
