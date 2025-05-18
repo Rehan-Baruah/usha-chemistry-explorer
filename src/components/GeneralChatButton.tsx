@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { MessageSquare } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { MessageCircle } from "lucide-react";
 
 interface GeneralChatButtonProps {
   onClick: () => void;
@@ -8,13 +9,14 @@ interface GeneralChatButtonProps {
 
 const GeneralChatButton: React.FC<GeneralChatButtonProps> = ({ onClick }) => {
   return (
-    <button
+    <Button
       onClick={onClick}
-      className="fixed bottom-6 right-6 bg-purple-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:bg-purple-700 transition-colors z-20"
-      aria-label="Chat with Usha"
+      className="fixed bottom-4 right-4 rounded-full shadow-lg p-4 h-14 w-14 flex items-center justify-center"
+      size="icon"
     >
-      <MessageSquare className="h-6 w-6" />
-    </button>
+      <MessageCircle className="h-6 w-6" />
+      <span className="sr-only">Open Chat</span>
+    </Button>
   );
 };
 
