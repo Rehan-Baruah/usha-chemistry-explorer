@@ -1,12 +1,19 @@
 
 import React, { useState, useMemo } from 'react';
+<<<<<<< HEAD
+=======
+import { Message } from '../services/chatService'; // Added import
+>>>>>>> ee4c5e5361ea1d46d6bed4286b6d58009903a204
 import PeriodicTable from '../components/PeriodicTable';
 import FilterPanel from '../components/FilterPanel';
 import ChatModal from '../components/ChatModal';
 import GeneralChatButton from '../components/GeneralChatButton';
 import elementsData from '../data/elements.json';
 import { ElementData } from '../components/ElementTile';
+<<<<<<< HEAD
 import { Message } from '../services/chatService'; // Corrected import for Message type
+=======
+>>>>>>> ee4c5e5361ea1d46d6bed4286b6d58009903a204
 
 const PeriodicTablePage = () => {
   // Extract unique classifications for filter options
@@ -26,7 +33,17 @@ const PeriodicTablePage = () => {
   // State for chat modal
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatElementContext, setChatElementContext] = useState<ElementData | undefined>(undefined);
+<<<<<<< HEAD
   const [chatHistory, setChatHistory] = useState<Message[]>([{ role: 'model', content: "Hello! I'm Usha. How can I assist you with your chemistry questions today?" }]);
+=======
+  const [chatHistory, setChatHistory] = useState<Message[]>([]); // Added chatHistory state
+
+  // Usha's initial greeting message
+  const initialGreetingMessage: Message = {
+    role: 'model',
+    content: "Hello! I'm Usha. How can I assist you with your chemistry questions today?"
+  };
+>>>>>>> ee4c5e5361ea1d46d6bed4286b6d58009903a204
 
   // Create a map of elements by name for easy lookup
   const elementsMap = useMemo(() => {
@@ -40,6 +57,7 @@ const PeriodicTablePage = () => {
   // Function to open chat with element context
   const openElementChat = (elementName: string) => {
     const element = elementsMap.get(elementName);
+<<<<<<< HEAD
     const initialMessage: Message = { role: 'model', content: "Hello! I'm Usha. How can I assist you with your chemistry questions today?" };
     if (element) {
       setChatElementContext(element);
@@ -50,14 +68,28 @@ const PeriodicTablePage = () => {
       setChatElementContext(undefined); // Keep general context for fallback
       setChatHistory([initialMessage]);
       setIsChatOpen(true);
+=======
+    if (element) {
+      setChatElementContext(element);
+      setChatHistory([initialGreetingMessage]); // Reset chat history with greeting
+      setIsChatOpen(true);
+    } else {
+      console.error(`Element not found: ${elementName}`);
+      openGeneralChat(); // Fallback to general chat, which also resets history
+>>>>>>> ee4c5e5361ea1d46d6bed4286b6d58009903a204
     }
   };
 
   // Function to open general chat
   const openGeneralChat = () => {
+<<<<<<< HEAD
     const initialMessage: Message = { role: 'model', content: "Hello! I'm Usha. How can I assist you with your chemistry questions today?" };
     setChatElementContext(undefined);
     setChatHistory([initialMessage]);
+=======
+    setChatElementContext(undefined);
+    setChatHistory([initialGreetingMessage]); // Reset chat history with greeting
+>>>>>>> ee4c5e5361ea1d46d6bed4286b6d58009903a204
     setIsChatOpen(true);
   };
 
@@ -96,8 +128,13 @@ const PeriodicTablePage = () => {
         isOpen={isChatOpen} 
         onClose={() => setIsChatOpen(false)} 
         elementContext={chatElementContext}
+<<<<<<< HEAD
         chatHistory={chatHistory}
         setChatHistory={setChatHistory}
+=======
+        chatHistory={chatHistory} // Pass chatHistory
+        setChatHistory={setChatHistory} // Pass setChatHistory
+>>>>>>> ee4c5e5361ea1d46d6bed4286b6d58009903a204
       />
     </div>
   );

@@ -21,6 +21,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext, 
   const [inputText, setInputText] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
+<<<<<<< HEAD
   
   
   // Scroll to new messages with specific behavior based on sender
@@ -42,6 +43,16 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext, 
         // For Usha's messages, scroll to make the top of the message visible
         lastMessageElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
+=======
+  const bottomRef = useRef<HTMLDivElement>(null);
+  
+
+  
+  // Scroll to bottom when new messages are added
+  useEffect(() => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+>>>>>>> ee4c5e5361ea1d46d6bed4286b6d58009903a204
     }
   }, [chatHistory]);
   
@@ -49,14 +60,28 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext, 
     if (!inputText.trim()) return;
     
     const userMessage = { role: 'user' as const, content: inputText };
+<<<<<<< HEAD
     setChatHistory(prev => [...prev, userMessage]);
+=======
+    // Update history immediately for responsiveness
+    const currentChatHistory = [...chatHistory, userMessage];
+    setChatHistory(currentChatHistory);
+>>>>>>> ee4c5e5361ea1d46d6bed4286b6d58009903a204
     setInputText('');
     setIsLoading(true);
     
     try {
+<<<<<<< HEAD
       const response = await chatService.sendMessage(
         userMessage.content, 
         chatHistory, 
+=======
+      // Pass the history *before* the current user message to the service
+      const historyForService = chatHistory.slice(); 
+      const response = await chatService.sendMessage(
+        userMessage.content, 
+        historyForService, // Use the state before adding the current user's message
+>>>>>>> ee4c5e5361ea1d46d6bed4286b6d58009903a204
         elementContext
       );
       
@@ -102,7 +127,10 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext, 
               {chatHistory.map((message, index) => (
                 <div 
                   key={index} 
+<<<<<<< HEAD
                   id={`chat-message-${index}`}
+=======
+>>>>>>> ee4c5e5361ea1d46d6bed4286b6d58009903a204
                   className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div 
@@ -112,7 +140,10 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext, 
                   </div>
                 </div>
               ))}
+<<<<<<< HEAD
               {/* isLoading indicator is outside the mapped messages, so scrollIntoView on last message works correctly */}
+=======
+>>>>>>> ee4c5e5361ea1d46d6bed4286b6d58009903a204
               {isLoading && (
                 <div className="flex justify-start">
                   <div className="max-w-[80%] rounded-lg p-3 bg-muted text-muted-foreground flex items-center gap-2">
@@ -121,6 +152,10 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext, 
                   </div>
                 </div>
               )}
+<<<<<<< HEAD
+=======
+              <div ref={bottomRef} />
+>>>>>>> ee4c5e5361ea1d46d6bed4286b6d58009903a204
             </div>
           </ScrollArea>
         </div>
