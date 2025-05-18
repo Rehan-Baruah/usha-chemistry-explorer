@@ -6,6 +6,7 @@ import ChatModal from '../components/ChatModal';
 import GeneralChatButton from '../components/GeneralChatButton';
 import elementsData from '../data/elements.json';
 import { ElementData } from '../components/ElementTile';
+import { Message } from '../services/chatService'; // Corrected import for Message type
 
 const PeriodicTablePage = () => {
   // Extract unique classifications for filter options
@@ -25,6 +26,7 @@ const PeriodicTablePage = () => {
   // State for chat modal
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatElementContext, setChatElementContext] = useState<ElementData | undefined>(undefined);
+  const [chatHistory, setChatHistory] = useState<Message[]>([{ role: 'model', content: "Hello! I'm Usha. How can I assist you with your chemistry questions today?" }]);
 
   // Create a map of elements by name for easy lookup
   const elementsMap = useMemo(() => {
@@ -37,21 +39,25 @@ const PeriodicTablePage = () => {
 
   // Function to open chat with element context
   const openElementChat = (elementName: string) => {
-    // Find the element by name from our elements data
     const element = elementsMap.get(elementName);
+    const initialMessage: Message = { role: 'model', content: "Hello! I'm Usha. How can I assist you with your chemistry questions today?" };
     if (element) {
       setChatElementContext(element);
+      setChatHistory([initialMessage]);
       setIsChatOpen(true);
     } else {
       console.error(`Element not found: ${elementName}`);
-      // Open general chat as fallback
-      openGeneralChat();
+      setChatElementContext(undefined); // Keep general context for fallback
+      setChatHistory([initialMessage]);
+      setIsChatOpen(true);
     }
   };
 
   // Function to open general chat
   const openGeneralChat = () => {
+    const initialMessage: Message = { role: 'model', content: "Hello! I'm Usha. How can I assist you with your chemistry questions today?" };
     setChatElementContext(undefined);
+    setChatHistory([initialMessage]);
     setIsChatOpen(true);
   };
 
@@ -90,6 +96,8 @@ const PeriodicTablePage = () => {
         isOpen={isChatOpen} 
         onClose={() => setIsChatOpen(false)} 
         elementContext={chatElementContext}
+        chatHistory={chatHistory}
+        setChatHistory={setChatHistory}
       />
     </div>
   );
