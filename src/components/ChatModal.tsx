@@ -5,6 +5,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { chatService, Message } from '../services/chatService';
 import { Loader2 } from "lucide-react";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { ElementData } from './ElementTile';
 
 interface ChatModalProps {
@@ -98,13 +100,9 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext }
                   className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div 
-                    className={`max-w-[80%] rounded-lg p-3 ${
-                      message.role === 'user' 
-                        ? 'bg-primary text-primary-foreground' 
-                        : 'bg-muted text-muted-foreground'
-                    }`}
+                    className={`max-w-[80%] rounded-lg p-3 ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground prose dark:prose-invert'}`}
                   >
-                    {message.content}
+                    {message.role === 'user' ? message.content : <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>}
                   </div>
                 </div>
               ))}

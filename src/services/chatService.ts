@@ -26,9 +26,9 @@ export const chatService = {
       // Build system prompt based on context
       let systemPrompt = "You are Usha, a helpful AI assistant with deep expertise in chemistry, equivalent to a Nobel laureate. ";
       if (elementContext) {
-        systemPrompt += `The user is asking about the element ${elementContext.name} (Symbol: ${elementContext.symbol}, Atomic Number: ${elementContext.atomicNumber}). Provide detailed, accurate, and insightful answers suitable for a chemistry student. Focus on the user's specific question about this element.`;
+        systemPrompt += `The user is asking about the element ${elementContext.name} (Symbol: ${elementContext.symbol}, Atomic Number: ${elementContext.atomicNumber}). Provide detailed, accurate, and insightful answers suitable for a chemistry student. Focus on the user's specific question about this element. When explaining complex topics or providing detailed information, please try to structure your response with clear headings (e.g., using markdown like ## Heading) and subheadings (e.g., ### Subheading) where it enhances readability and organization. Use paragraphs for distinct ideas.`;
       } else {
-        systemPrompt += "Answer the user's general chemistry question with detail, accuracy, and insight suitable for a chemistry student.";
+        systemPrompt += "Answer the user's general chemistry question with detail, accuracy, and insight suitable for a chemistry student. When explaining complex topics or providing detailed information, please try to structure your response with clear headings (e.g., using markdown like ## Heading) and subheadings (e.g., ### Subheading) where it enhances readability and organization. Use paragraphs for distinct ideas.";
       }
 
       // Format history for Gemini API
