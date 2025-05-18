@@ -21,13 +21,27 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext, 
   const [inputText, setInputText] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
   
   
-  // Scroll to bottom when new messages are added
+  // Scroll to new messages with specific behavior based on sender
   useEffect(() => {
-    if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (chatHistory.length === 0) {
+      return;
+    }
+
+    const lastMessageIndex = chatHistory.length - 1;
+    const lastMessageElementId = `chat-message-${lastMessageIndex}`;
+    const lastMessageElement = document.getElementById(lastMessageElementId);
+
+    if (lastMessageElement) {
+      const lastMessage = chatHistory[lastMessageIndex];
+      if (lastMessage.role === 'user') {
+        // For user messages, scroll to make the bottom of the message visible
+        lastMessageElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      } else if (lastMessage.role === 'model') {
+        // For Usha's messages, scroll to make the top of the message visible
+        lastMessageElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
   }, [chatHistory]);
   
@@ -88,6 +102,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext, 
               {chatHistory.map((message, index) => (
                 <div 
                   key={index} 
+                  id={`chat-message-${index}`}
                   className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div 
@@ -97,6 +112,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext, 
                   </div>
                 </div>
               ))}
+              {/* isLoading indicator is outside the mapped messages, so scrollIntoView on last message works correctly */}
               {isLoading && (
                 <div className="flex justify-start">
                   <div className="max-w-[80%] rounded-lg p-3 bg-muted text-muted-foreground flex items-center gap-2">
@@ -105,7 +121,6 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext, 
                   </div>
                 </div>
               )}
-              <div ref={bottomRef} />
             </div>
           </ScrollArea>
         </div>
