@@ -13,55 +13,51 @@ interface ChatModalProps {
   isOpen: boolean;
   onClose: () => void;
   elementContext?: ElementData;
+  chatHistory: Message[];
+  setChatHistory: React.Dispatch<React.SetStateAction<Message[]>>;
 }
 
-const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext }) => {
+const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext, chatHistory, setChatHistory }) => {
   const [inputText, setInputText] = useState('');
-  const [messages, setMessages] = useState<Message[]>([]);
+
   const [isLoading, setIsLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   
-  // Add Usha's greeting message when the chat modal opens
-  useEffect(() => {
-    if (isOpen && messages.length === 0) {
-      setMessages([
-        { 
-          role: 'model', 
-          content: "Hello! I'm Usha. How can I assist you with your chemistry questions today?" 
-        }
-      ]);
-    }
-  }, [isOpen]);
+
   
   // Scroll to bottom when new messages are added
   useEffect(() => {
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages]);
+  }, [chatHistory]);
   
   const handleSend = async () => {
     if (!inputText.trim()) return;
     
     const userMessage = { role: 'user' as const, content: inputText };
-    setMessages(prev => [...prev, userMessage]);
+    // Update history immediately for responsiveness
+    const currentChatHistory = [...chatHistory, userMessage];
+    setChatHistory(currentChatHistory);
     setInputText('');
     setIsLoading(true);
     
     try {
+      // Pass the history *before* the current user message to the service
+      const historyForService = chatHistory.slice(); 
       const response = await chatService.sendMessage(
         userMessage.content, 
-        messages, 
+        historyForService, // Use the state before adding the current user's message
         elementContext
       );
       
-      setMessages(prev => [
+      setChatHistory(prev => [
         ...prev, 
         { role: 'model', content: response }
       ]);
     } catch (error) {
       console.error('Chat error:', error);
-      setMessages(prev => [
+      setChatHistory(prev => [
         ...prev, 
         { 
           role: 'model', 
@@ -94,7 +90,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, elementContext }
         <div className="flex-1 overflow-hidden mb-4">
           <ScrollArea className="h-full">
             <div className="space-y-4 p-4">
-              {messages.map((message, index) => (
+              {chatHistory.map((message, index) => (
                 <div 
                   key={index} 
                   className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}

@@ -1,5 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
+import { Message } from '../services/chatService'; // Added import
 import PeriodicTable from '../components/PeriodicTable';
 import FilterPanel from '../components/FilterPanel';
 import ChatModal from '../components/ChatModal';
@@ -25,6 +26,13 @@ const PeriodicTablePage = () => {
   // State for chat modal
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatElementContext, setChatElementContext] = useState<ElementData | undefined>(undefined);
+  const [chatHistory, setChatHistory] = useState<Message[]>([]); // Added chatHistory state
+
+  // Usha's initial greeting message
+  const initialGreetingMessage: Message = {
+    role: 'model',
+    content: "Hello! I'm Usha. How can I assist you with your chemistry questions today?"
+  };
 
   // Create a map of elements by name for easy lookup
   const elementsMap = useMemo(() => {
@@ -37,21 +45,21 @@ const PeriodicTablePage = () => {
 
   // Function to open chat with element context
   const openElementChat = (elementName: string) => {
-    // Find the element by name from our elements data
     const element = elementsMap.get(elementName);
     if (element) {
       setChatElementContext(element);
+      setChatHistory([initialGreetingMessage]); // Reset chat history with greeting
       setIsChatOpen(true);
     } else {
       console.error(`Element not found: ${elementName}`);
-      // Open general chat as fallback
-      openGeneralChat();
+      openGeneralChat(); // Fallback to general chat, which also resets history
     }
   };
 
   // Function to open general chat
   const openGeneralChat = () => {
     setChatElementContext(undefined);
+    setChatHistory([initialGreetingMessage]); // Reset chat history with greeting
     setIsChatOpen(true);
   };
 
@@ -90,6 +98,8 @@ const PeriodicTablePage = () => {
         isOpen={isChatOpen} 
         onClose={() => setIsChatOpen(false)} 
         elementContext={chatElementContext}
+        chatHistory={chatHistory} // Pass chatHistory
+        setChatHistory={setChatHistory} // Pass setChatHistory
       />
     </div>
   );
